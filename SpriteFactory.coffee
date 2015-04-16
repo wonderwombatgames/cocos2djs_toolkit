@@ -245,4 +245,20 @@ createPhysicsSprite: (image, opacity, scale) ->
     menu.alignItemsHorizontallyWithPadding(pad)
 
     return  menu ## end of createHorizMenu
+
+##-------------------------------------------------------------------
+  createGlyph: (glyphCode, glyphColor, strokeColor, shadowColor) ->
+    ## glyph icon
+    glyphLabel = new cc.LabelTTF(String.fromCharCode(glyphCode), 
+                                global.glyph.fontName, 
+                                global.glyph.fontSize)
+    size = Math.floor(glyphLabel.getContentSize().width / 16)
+
+    glyphLabel.setColor(glyphColor)
+    glyphLabel.enableStroke(strokeColor, size)
+    glyphLabel.enableShadow(shadowColor, cp.v(size, -size), 2*size);
+    
+    glyphLabel.retain()
+
+    return glyphLabel  ## end createGlyph
 }
