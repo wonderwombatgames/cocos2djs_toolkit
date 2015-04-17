@@ -247,16 +247,50 @@ createPhysicsSprite: (image, opacity, scale) ->
     return  menu ## end of createHorizMenu
 
 ##-------------------------------------------------------------------
-  createGlyph: (glyphCode, glyphColor, strokeColor, shadowColor) ->
+  createLabelMenu: (menuItems, colors, pos) ->
+    self = this
+
+    ## create menu items with assigned event callbacks
+    items = []
+    for item in menuItems
+      items.push(@createLabelItem(colors, 
+                                  item.glyphCode,
+                                  item.size, 
+                                  item.trigger,
+                                  item.node))
+
+    ## create the buttons
+    labelMenu = new cc.Menu(items)
+    labelMenu.setPosition(pos)
+    
+    return labelMenu ## end createMenuBtn
+
+##-------------------------------------------------------------------
+  createLabelItem: (colors, glyphCode, size, trigger, node) ->
+    self = this
+
+    ## glyph icon
+    glyphColor = colors.font || cc.color(213,101,44, 196) ## orange
+    strokeColor = colors.stroke || cc.color(204,34,41, 196) ## dark orange
+    shadowColor = colors.shadow || cc.color(0,0,0, 150) ## black
+    glyphLabel = ww.spriteFactory.createGlyph(glyphCode, size, glyphColor, strokeColor, shadowColor)
+
+    ## create label menu item
+    labelItem = new cc.MenuItemLabel(glyphLabel, trigger, node)
+
+    return labelItem ## end createMenuBtn
+
+##-------------------------------------------------------------------
+  createGlyph: (glyphCode, size, glyphColor, strokeColor, shadowColor) ->
     ## glyph icon
     glyphLabel = new cc.LabelTTF(String.fromCharCode(glyphCode), 
                                 global.glyph.fontName, 
-                                global.glyph.fontSize)
+                                size)
     size = Math.floor(glyphLabel.getContentSize().width / 16)
 
     glyphLabel.setColor(glyphColor)
     glyphLabel.enableStroke(strokeColor, size)
-    glyphLabel.enableShadow(shadowColor, cp.v(size, -size), 2*size);
+    glyphLabel.enableShadow(shadowColor, cp.v(size, -size), 2*size)
     
     glyphLabel.retain()
 

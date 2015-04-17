@@ -49,6 +49,24 @@ ww.Score = cc.Class.extend (
     return ## end init
 
 ##-------------------------------------------------------------------
+  setColor: (labelColor) ->
+    @hudLabel.setColor(labelColor)
+
+    return ## end setColor
+
+##-------------------------------------------------------------------
+  enableStroke: (strokeColor, size) ->
+    @hudLabel.enableStroke(strokeColor, size)
+
+    return ## end enableStroke
+
+##-------------------------------------------------------------------
+  enableShadow: (shadowColor, offSet, size) ->
+    @hudLabel.enableShadow(shadowColor, offSet, size)
+
+    return ## end enableShadow
+
+##-------------------------------------------------------------------
   showVal: (show) ->
     @hudLabel.setVisible(show)
 

@@ -36,6 +36,10 @@ ww.GameModelClass = cc.Node.extend(
     ## set empty entities object
     @entities = {}
 
+    ## audio
+    cc.audioEngine.setMusicVolume(0.5)
+    cc.audioEngine.setEffectsVolume(0.5)
+
     return true ## end init
 
 ##-------------------------------------------------------------------
@@ -51,6 +55,9 @@ ww.GameModelClass = cc.Node.extend(
     ## restart updating physics simulation
     @scheduleUpdate()
 
+    ## audio
+    cc.audioEngine.resumeMusic()
+
     cc.log("===resuming model")
 
     return ## end onEnter
@@ -60,6 +67,10 @@ ww.GameModelClass = cc.Node.extend(
     ## stop updating physics simulation
     @unscheduleUpdate()
     cc.log("===pausing model")
+
+    ## audio
+    cc.audioEngine.stopAllEffects()
+    cc.audioEngine.pauseMusic()
 
     return ## end onExit
 
