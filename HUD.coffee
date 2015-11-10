@@ -5,6 +5,18 @@
 ## wonder wombat namespace
 ww = ww || {}
 
+##-------------------------------------------------------------------
+ww.formatStr = () ->
+  args = arguments
+  if args[0] != 'undefined'
+    return args[0].replace(/{(\d+)}/g, (match, number) ->
+      ret = match
+      if args[number] != 'undefined'
+        ret = args[number]
+      return ret
+      )
+  else
+    return ""
 
 ##======== Score label class
 ww.Score = cc.Class.extend (
@@ -17,22 +29,22 @@ ww.Score = cc.Class.extend (
   ##    @param {cc.color}
   ##    @param {cc.p}
   ##    @param {number}
-  ctor: (parent, fontName, fontSize, fontColor, position, prefix, value) ->
-    @init(parent, fontName, fontSize, fontColor, position, prefix, value) 
+  ctor: (parent, fontName, fontSize, fontColor, position, format, value) ->
+    @init(parent, fontName, fontSize, fontColor, position, format, value) 
     @classNAME = "HudScore"
 
     return ## end ctor
 
 ##-------------------------------------------------------------------
-  init: (parent, fontName, fontSize, fontColor, position, prefix, val) ->
+  init: (parent, fontName, fontSize, fontColor, position, format, val) ->
   	##default for last param
     @value = val || 0
     @initValue = @value
-    @prefix = prefix
+    @format = format
     
 
-    path = "res/fonts/"
-    ext = ".ttf"
+    path = global.style.fontPath
+    ext = global.style.fontExt
     if (cc.sys.isNative) and (cc.sys.OS_ANDROID)
       fontPath = path + fontName + ext
       @hudLabel = new cc.LabelTTF("", fontPath, fontSize)
@@ -74,7 +86,8 @@ ww.Score = cc.Class.extend (
 
 ##-------------------------------------------------------------------
   displayVal: () ->
-    score = @prefix + " " + @value
+    val = @value
+    score = ww.formatStr(@format, val.toString()) ##+ " " + @value
     @hudLabel.setString(score);
 
     return ## end displayVal
@@ -125,8 +138,8 @@ ww.Timer = ww.Score.extend (
   ##    @param {cc.color}
   ##    @param {cc.p}
   ##    @param {number}
-  ctor: (parent, fontName, fontSize, fontColor, position, prefix, value) ->
-    @init(parent, fontName, fontSize, fontColor, position, prefix, value) 
+  ctor: (parent, fontName, fontSize, fontColor, position, format, value) ->
+    @init(parent, fontName, fontSize, fontColor, position, format, value) 
     @classNAME = "HudTimer"
 
     return ## end ctor

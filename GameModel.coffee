@@ -46,14 +46,36 @@ ww.GameModelClass = cc.Node.extend(
   setupLogic: (_gameLogic) ->
 
     @logic = _gameLogic
-    @logic.init()
+    if (@logic.init?)
+      @logic.init()
 
     return ## end setupLogic 
+
+##-------------------------------------------------------------------
+  pauseModel: () ->
+    ## stop updating physics simulation
+    @unscheduleUpdate()
+
+    if (@logic?)
+      if (@logic.pauseLogic?)
+        @logic.pauseLogic()
+
+    ## audio
+    cc.audioEngine.stopAllEffects()
+    cc.audioEngine.pauseMusic()
+
+    cc.log("===pausing model")
+
+    return ## end onExit
 
 ##-------------------------------------------------------------------
   resumeModel: () ->
     ## restart updating physics simulation
     @scheduleUpdate()
+
+    if (@logic?)
+      if (@logic.resumeLogic?)
+        @logic.resumeLogic()
 
     ## audio
     cc.audioEngine.resumeMusic()
@@ -61,18 +83,6 @@ ww.GameModelClass = cc.Node.extend(
     cc.log("===resuming model")
 
     return ## end onEnter
-
-##-------------------------------------------------------------------
-  pauseModel: () ->
-    ## stop updating physics simulation
-    @unscheduleUpdate()
-    cc.log("===pausing model")
-
-    ## audio
-    cc.audioEngine.stopAllEffects()
-    cc.audioEngine.pauseMusic()
-
-    return ## end onExit
 
 ##-------------------------------------------------------------------
   update: (dt) ->
